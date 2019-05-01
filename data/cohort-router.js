@@ -50,6 +50,23 @@ useNullAsDefault:true,
       res.status(500).json(err)
     })
   });
+  router.get('/:id/students', (req, res) => {
+    const cohort_id =req.params.id;
+    db('cohorts')
+    .join('students','students.cohort_id','cohorts.id')
+    .select('students.name')
+    .where('cohorts.id', cohort_id)
+    .then(students => {
+    if (students.length>0) {
+       res.status(200).json(students);
+    } else {
+       res.status(404).json({message:'The specified Cohort does not exist or has no Students'});
+        }
+      })
+    .catch(err => {
+      res.status(500).json(err);
+      });
+  });
 
    router.put('/:id', (req, res) => {
     if (!req.body.name){
