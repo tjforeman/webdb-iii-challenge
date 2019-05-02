@@ -51,11 +51,11 @@ useNullAsDefault:true,
     })
   });
   router.get('/:id/students', (req, res) => {
-    const cohort_id =req.params.id;
+    const id =req.params.id;
     db('cohorts')
     .join('students','students.cohort_id','cohorts.id')
-    .select('students.name')
-    .where('cohorts.id', cohort_id)
+    .select({cohort:'cohorts.name'},'students.name')
+    .where('cohorts.id', id)
     .then(students => {
     if (students.length>0) {
        res.status(200).json(students);
